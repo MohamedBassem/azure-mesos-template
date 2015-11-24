@@ -21,12 +21,6 @@
         "description": "Password for the Virtual Machine."
       }
     },
-    "dnsNameForJumpboxPublicIP": {
-      "type": "string",
-      "metadata": {
-        "description": "Sets the Domain name label for the jumpbox.  The concatenation of the domain name label and the regionalized DNS zone make up the fully qualified domain name associated with the public IP address."
-      }
-    },
     "dnsNameForContainerServicePublicIP": {
       "type": "string",
       "metadata": {
@@ -50,18 +44,6 @@
       ],
       "metadata": {
         "description": "The number of Mesos masters for the cluster."
-      }
-    },
-    "jumpboxConfiguration": {
-      "type": "string",
-      "defaultValue": "windows",
-      "allowedValues": [
-        "none",
-        "linux",
-        "windows"
-      ],
-      "metadata": {
-        "description": "Choose to have a jumpbox for debugging on the private subnet."
       }
     },
     "masterConfiguration": {
@@ -109,24 +91,6 @@
       ],
       "metadata": {
         "description": "The size of the Virtual Machine for the master."
-      }
-    },
-    "jumpboxVMSize": {
-      "type": "string",
-      "defaultValue": "Standard_D2",
-      "allowedValues": [
-        "Standard_A1",
-        "Standard_D1",
-        "Standard_D2",
-        "Standard_D3",
-        "Standard_D4",
-        "Standard_D11",
-        "Standard_D12",
-        "Standard_D13",
-        "Standard_D14"
-      ],
-      "metadata": {
-        "description": "The size of the Virtual Machine for the jumpbox."
       }
     },
     "clusterPrefix": {
@@ -181,7 +145,6 @@
     "newStorageAccountNamePrefix": "[tolower(parameters('newStorageAccountNamePrefix'))]",
     "masterVMNamePrefix": "[concat(parameters('clusterPrefix'),'master')]",
     "agentVMNamePrefix": "[concat(parameters('clusterPrefix'),'agent')]",
-    "jumpboxVMNamePrefix": "[concat(parameters('clusterPrefix'),'jumpbox')]",
     "osImagePublisher": "Canonical",
     "osImageOffer": "UbuntuServer",
     "osImageSKU": "14.04.3-LTS",
@@ -192,7 +155,6 @@
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
     "addressPrefix": "10.0.0.0/16",
     "subnetPrefix": "10.0.0.0/18",
-    "jumpboxAddr": 4,
     "masterFirstAddr": 5,
     "agentFirstAddr": 50,
     "nsgName": "node-nsg",
@@ -445,60 +407,6 @@
           },
           "omsStorageAccountKey": {
             "value": "[variables('omsStorageAccountKey')]"
-          }
-        }
-      }
-    },
-    {
-      "apiVersion": "2015-01-01",
-      "type": "Microsoft.Resources/deployments",
-      "name": "createJumpbox",
-      "dependsOn": [
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('newStorageAccountNamePrefix'), '0')]",
-        "[variables('vnetID')]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(variables('customScriptLocation'), 'jumpbox-', parameters('jumpboxConfiguration'), '.json')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "newStorageAccountName": {
-            "value": "[concat(variables('newStorageAccountNamePrefix'), '0')]"
-          },
-          "adminUsername": {
-            "value": "[parameters('adminUsername')]"
-          },
-          "adminPassword": {
-            "value": "[parameters('adminPassword')]"
-          },
-          "dnsNameForJumpboxPublicIP": {
-            "value": "[tolower(parameters('dnsNameForJumpboxPublicIP'))]"
-          },
-          "jumpboxVMSize": {
-            "value": "[parameters('jumpboxVMSize')]"
-          },
-          "subnetPrefix": {
-            "value": "[variables('subnetPrefix')]"
-          },
-          "subnetRef": {
-            "value": "[variables('subnetRef')]"
-          },
-          "jumpboxAddr": {
-            "value": "[variables('jumpboxAddr')]"
-          },
-          "jumpboxVMNamePrefix": {
-            "value": "[variables('jumpboxVMNamePrefix')]"
-          },
-          "customScriptLocation": {
-            "value": "[variables('customScriptLocation')]"
-          },
-          "masterVMNamePrefix": {
-            "value": "[variables('masterVMNamePrefix')]"
-          },
-          "sshRSAPublicKey": {
-            "value": "[parameters('sshRSAPublicKey')]"
           }
         }
       }
