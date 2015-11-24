@@ -11,17 +11,11 @@
   "dnsNameForContainerServicePublicIP": {
     "value": "mesosscalable0921g"
   },
-  "dnsNameForJumpboxPublicIP": {
-    "value": "mesosscalablejb0921g"
-  },
   "agentCount": {
     "value": 3
   },
   "masterCount": {
     "value": 3
-  },
-  "jumpboxConfiguration": {
-    "value": "windows"
   },
   "masterConfiguration": {
     "value": "masters-are-not-agents"
@@ -31,9 +25,6 @@
   },
   "masterVMSize" : {
     "value": "Standard_D1"
-  },
-  "jumpboxVMSize": {
-    "value": "Standard_D2"
   },
   "clusterPrefix": {
     "value": "c2"
