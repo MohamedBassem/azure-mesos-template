@@ -154,7 +154,7 @@
     "nsgName": "node-nsg",
     "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsgName'))]",
     "storageAccountType": "Standard_GRS",
-    "customScriptLocation": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/mesos-swarm-marathon/",
+    "customScriptLocation": "https://raw.githubusercontent.com/MohamedBassem/azure-rconsole-template/master/",
     "agentFiles": [
       "agent-0.json",
       "agent-gt0.json"
