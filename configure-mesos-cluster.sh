@@ -16,8 +16,6 @@ echo "starting mesos cluster configuration"
 date
 ps ax
 
-SWARM_VERSION="1.0.0-rc2"
-
 #############
 # Parameters
 #############
@@ -294,18 +292,6 @@ if ismaster ; then
   echo 'Mesos Cluster on Microsoft Azure' | sudo tee /etc/mesos-master/cluster
 fi
 
-if ismaster  && [ "$MARATHONENABLED" == "true" ] ; then
-  # setup marathon
-  sudo mkdir -p /etc/marathon/conf
-  sudo cp /etc/mesos-master/hostname /etc/marathon/conf
-  sudo cp /etc/mesos/zk /etc/marathon/conf/master
-  zkmarathonconfig=$(zkconfig "marathon")
-  echo $zkmarathonconfig | sudo tee /etc/marathon/conf/zk
-  # enable marathon to failover tasks to other nodes immediately
-  echo 0 | sudo tee /etc/marathon/conf/failover_timeout
-  #echo false | sudo tee /etc/marathon/conf/checkpoint
-fi
-
 #########################################
 # Configure Mesos Master and Frameworks
 #########################################
@@ -374,6 +360,30 @@ if isagent ; then
   mv $RESOLV_TMP /etc/resolv.conf
 fi
 
+
+#########################
+# Install Golang & RConsole
+#########################
+
+if ismaster; then
+  pushd /tmp
+  wget https://storage.googleapis.com/golang/go1.5.1.linux-amd64.tar.gz
+  sudo tar -C /usr/local -xzf go1.5.1.linux-amd64.tar.gz
+  popd
+
+  mkdir "$HOMEDIR/go"
+  {
+      echo '# GoLang'
+      echo 'export PATH=$PATH:/usr/local/go/bin'
+      echo 'export GOPATH=$HOME/go'
+      echo 'export PATH=$PATH:$GOPATH/bin'
+  } >> "$HOMEDIR/.profile"
+
+  source "$HOMEDIR/.profile"
+  go get github.com/MohamedBassem/r-cluster
+fi
+
+
 ##############################################
 # configure init rules restart all processes
 ##############################################
@@ -382,12 +392,6 @@ echo "(re)starting mesos and framework processes"
 if ismaster ; then
   sudo service zookeeper restart
   sudo service mesos-master start
-  if [ "$MARATHONENABLED" == "true" ] ; then
-    sudo service marathon start
-  fi
-  if [ "$CHRONOSENABLED" == "true" ] ; then
-    sudo service chronos start
-  fi
 else
   echo manual | sudo tee /etc/init/zookeeper.override
   sudo service zookeeper stop
@@ -407,28 +411,7 @@ fi
 echo "processes after restarting mesos"
 ps ax
 
-# Run swarm manager container on port 2376 (no auth)
-if ismaster && [ "$SWARMENABLED" == "true" ] ; then
-  echo "starting docker swarm:$SWARM_VERSION"
-  echo "sleep to give master time to come up"
-  sleep 10
-  echo sudo docker run -d -e SWARM_MESOS_USER=root \
-      --restart=always \
-      -p 2376:2375 -p 3375:3375 swarm:$SWARM_VERSION manage \
-      -c mesos-experimental \
-      --cluster-opt mesos.address=0.0.0.0 \
-      --cluster-opt mesos.port=3375 $zkmesosconfig
-  sudo docker run -d -e SWARM_MESOS_USER=root \
-      --restart=always \
-      -p 2376:2375 -p 3375:3375 swarm:$SWARM_VERSION manage \
-      -c mesos-experimental \
-      --cluster-opt mesos.address=0.0.0.0 \
-      --cluster-opt mesos.port=3375 $zkmesosconfig
-  sudo docker ps
-  echo "completed starting docker swarm"
-fi
 echo "processes at end of script"
 ps ax
-echo "Finished installing and configuring docker and swarm"
 date
 echo "completed mesos cluster configuration"

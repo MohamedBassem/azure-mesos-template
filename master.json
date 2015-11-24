@@ -252,6 +252,18 @@
               "backendPort": 22,
               "enableFloatingIP": false
             }
+          },
+          {
+            "name": "[concat('RConsole-Port', '')]",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[variables('nodesLbIPConfigID')]"
+              },
+              "protocol": "tcp",
+              "frontendPort": 5055,
+              "backendPort": 5055,
+              "enableFloatingIP": false
+            }
           }
         ]
       }
@@ -286,6 +298,9 @@
               "loadBalancerInboundNatRules": [
                 {
                   "id": "[concat(variables('nodesLbID'),'/inboundNatRules/SSH-',parameters('masterVMNamePrefix'),copyIndex(1))]"
+                },
+                {
+                  "id": "[concat(variables('nodesLbID'),'/inboundNatRules/RConsole-Port')]"
                 }
               ]
             }
