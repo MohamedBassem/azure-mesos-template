@@ -214,7 +214,7 @@
               "description": "Rconsole port",
               "protocol": "Tcp",
               "sourcePortRange": "*",
-              "destinationPortRange": "5050",
+              "destinationPortRange": "5055",
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "access": "Allow",
