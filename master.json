@@ -194,61 +194,13 @@
         "loadBalancingRules": [],
         "inboundNatRules": [
           {
-            "name": "[concat('SSH-',parameters('masterVMNamePrefix'), '1')]",
+            "name": "[concat('SSH-',parameters('masterVMNamePrefix'))]",
             "properties": {
               "frontendIPConfiguration": {
                 "id": "[variables('nodesLbIPConfigID')]"
               },
               "protocol": "tcp",
               "frontendPort": 2211,
-              "backendPort": 22,
-              "enableFloatingIP": false
-            }
-          },
-          {
-            "name": "[concat('SSH-',parameters('masterVMNamePrefix'), '2')]",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('nodesLbIPConfigID')]"
-              },
-              "protocol": "tcp",
-              "frontendPort": 2212,
-              "backendPort": 22,
-              "enableFloatingIP": false
-            }
-          },
-          {
-            "name": "[concat('SSH-',parameters('masterVMNamePrefix'), '3')]",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('nodesLbIPConfigID')]"
-              },
-              "protocol": "tcp",
-              "frontendPort": 2213,
-              "backendPort": 22,
-              "enableFloatingIP": false
-            }
-          },
-          {
-            "name": "[concat('SSH-',parameters('masterVMNamePrefix'), '4')]",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('nodesLbIPConfigID')]"
-              },
-              "protocol": "tcp",
-              "frontendPort": 2214,
-              "backendPort": 22,
-              "enableFloatingIP": false
-            }
-          },
-          {
-            "name": "[concat('SSH-',parameters('masterVMNamePrefix'), '5')]",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('nodesLbIPConfigID')]"
-              },
-              "protocol": "tcp",
-              "frontendPort": 2215,
               "backendPort": 22,
               "enableFloatingIP": false
             }
@@ -271,12 +223,8 @@
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[concat(parameters('masterVMNamePrefix'), copyIndex(1), '-nic')]",
+      "name": "[concat(parameters('masterVMNamePrefix'), '-nic')]",
       "location": "[resourceGroup().location]",
-      "copy": {
-        "name": "nicLoopNode",
-        "count": "[parameters('masterCount')]"
-      },
       "dependsOn": [
         "[variables('nodesLbID')]"
       ],
@@ -286,7 +234,7 @@
             "name": "ipConfigNode",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[concat(split(parameters('subnetPrefix'),'0/18')[0], copyIndex(parameters('masterFirstAddr')))]",
+              "privateIPAddress": "[concat(split(parameters('subnetPrefix'),'0/18')[0], parameters('masterFirstAddr'))]",
               "subnet": {
                 "id": "[parameters('subnetRef')]"
               },
@@ -297,7 +245,7 @@
               ],
               "loadBalancerInboundNatRules": [
                 {
-                  "id": "[concat(variables('nodesLbID'),'/inboundNatRules/SSH-',parameters('masterVMNamePrefix'),copyIndex(1))]"
+                  "id": "[concat(variables('nodesLbID'),'/inboundNatRules/SSH-',parameters('masterVMNamePrefix'))]"
                 },
                 {
                   "id": "[concat(variables('nodesLbID'),'/inboundNatRules/RConsole-Port')]"
@@ -311,14 +259,10 @@
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(parameters('masterVMNamePrefix'), copyIndex(1))]",
+      "name": "[concat(parameters('masterVMNamePrefix'))]",
       "location": "[resourceGroup().location]",
-      "copy": {
-        "name": "vmLoopNode",
-        "count": "[parameters('masterCount')]"
-      },
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', parameters('masterVMNamePrefix'), copyIndex(1), '-nic')]",
+        "[concat('Microsoft.Network/networkInterfaces/', parameters('masterVMNamePrefix'), '-nic')]",
         "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySet'))]"
       ],
       "properties": {
@@ -329,7 +273,7 @@
           "vmSize": "[parameters('masterVMSize')]"
         },
         "osProfile": {
-          "computerName": "[concat(parameters('masterVMNamePrefix'), copyIndex(1))]",
+          "computerName": "[concat(parameters('masterVMNamePrefix'))]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
@@ -341,9 +285,9 @@
             "version": "[parameters('osImageVersion')]"
           },
           "osDisk": {
-            "name": "[concat(parameters('masterVMNamePrefix'), copyIndex(1),'-osdisk')]",
+            "name": "[concat(parameters('masterVMNamePrefix'),'-osdisk')]",
             "vhd": {
-              "uri": "[concat('http://', parameters('newStorageAccountName'), '.blob.core.windows.net/vhds/', parameters('masterVMNamePrefix'), copyIndex(1), '-osdisk.vhd')]"
+              "uri": "[concat('http://', parameters('newStorageAccountName'), '.blob.core.windows.net/vhds/', parameters('masterVMNamePrefix'), '-osdisk.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -352,7 +296,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('masterVMNamePrefix'), copyIndex(1), '-nic'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('masterVMNamePrefix'), '-nic'))]"
             }
           ]
         }
@@ -360,15 +304,12 @@
     },
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('masterVMNamePrefix'), copyIndex(1), '/configuremaster')]",
+      "name": "[concat(parameters('masterVMNamePrefix'), '/configuremaster')]",
       "apiVersion": "2015-06-15",
       "location": "[resourceGroup().location]",
-      "copy": {
-        "name": "vmLoopNode",
-        "count": "[parameters('masterCount')]"
-      },
+      ,
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('masterVMNamePrefix'), copyIndex(1))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('masterVMNamePrefix'))]"
       ],
       "properties": {
         "publisher": "Microsoft.OSTCExtensions",
