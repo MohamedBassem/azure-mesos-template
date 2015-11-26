@@ -382,6 +382,8 @@ if ismaster; then
   export GOPATH="$HOMEDIR/go"
   /usr/local/go/bin/go get github.com/MohamedBassem/r-cluster
   sudo chown -R $AZUREUSER:$AZUREUSER $GOPATH
+
+  echo -e "start on startup\nrespawn\nscript\n\ncd $HOMEDIR/go/src/github.com/MohamedBassem/r-cluster;\n$HOMDIR/go/bin/r-cluster\nend script\n" > /etc/init/r-cluster
 fi
 
 
@@ -393,6 +395,7 @@ echo "(re)starting mesos and framework processes"
 if ismaster ; then
   sudo service zookeeper restart
   sudo service mesos-master start
+  sudo start r-cluster
 else
   echo manual | sudo tee /etc/init/zookeeper.override
   sudo service zookeeper stop
