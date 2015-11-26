@@ -393,7 +393,7 @@ fi
 # Mounting the microsoft account file share to /mnt/nfs
 ##############################################
 
-sudo apt-get install apt-file
+apt-get install -y apt-file || :
 
 sudo mkdir /mnt/nfs
 
