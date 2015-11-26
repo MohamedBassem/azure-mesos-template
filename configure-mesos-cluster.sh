@@ -386,7 +386,7 @@ if ismaster; then
   /usr/local/go/bin/go get github.com/MohamedBassem/r-cluster
   sudo chown -R $AZUREUSER:$AZUREUSER $GOPATH
 
-  echo -e "start on startup\nrespawn\nscript\n\ncd $HOMEDIR/go/src/github.com/MohamedBassem/r-cluster;\n$HOMDIR/go/bin/r-cluster\nend script\n" > /etc/init/r-cluster
+  echo -e "start on startup\nrespawn\nscript\n\ncd $HOMEDIR/go/src/github.com/MohamedBassem/r-cluster;\n$HOMEDIR/go/bin/r-cluster\nend script\n" > /etc/init/r-cluster.conf
 fi
 
 ##############################################
