@@ -377,10 +377,11 @@ if ismaster; then
       echo 'export PATH=$PATH:/usr/local/go/bin'
       echo 'export GOPATH=$HOME/go'
       echo 'export PATH=$PATH:$GOPATH/bin'
-  } >> "$HOMEDIR/.profile"
+  } >> "$HOMEDIR/.bashrc"
 
-  source "$HOMEDIR/.profile"
-  go get github.com/MohamedBassem/r-cluster
+  export GOPATH="$HOMEDIR/go"
+  /usr/local/go/bin/go get github.com/MohamedBassem/r-cluster
+  sudo chown -R $AZUREUSER:$AZUREUSER $GOPATH
 fi
 
 
