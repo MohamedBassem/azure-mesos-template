@@ -32,6 +32,9 @@ ACCOUNTKEY=$8
 set -x
 AZUREUSER=$9
 SSHKEY=${10}
+STORAGEACCOUNTNAME=${11}
+STORAGEACCOUNTKEY=${12}
+FILESHARENAME=${13}
 HOMEDIR="/home/$AZUREUSER"
 VMNAME=`hostname`
 VMNUMBER=`echo $VMNAME | sed 's/.*[^0-9]\([0-9]\+\)*$/\1/'`
@@ -386,6 +389,15 @@ if ismaster; then
   echo -e "start on startup\nrespawn\nscript\n\ncd $HOMEDIR/go/src/github.com/MohamedBassem/r-cluster;\n$HOMDIR/go/bin/r-cluster\nend script\n" > /etc/init/r-cluster
 fi
 
+##############################################
+# Mounting the microsoft account file share to /mnt/nfs
+##############################################
+
+sudo apt-get install apt-file
+
+sudo mkdir /mnt/nfs
+
+sudo mount -t cifs //${STORAGEACCOUNTNAME}.file.core.windows.net/$FILESHARENAME /mnt/nfs -o vers=3.0,user=$STORAGEACCOUNTNAME,password=$STORAGEACCOUNTKEY,dir_mode=0777,file_mode=0777
 
 ##############################################
 # configure init rules restart all processes

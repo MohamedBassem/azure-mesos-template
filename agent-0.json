@@ -2,10 +2,22 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json# ",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "newStorageAccountNamePrefix": {
+    "storageAccountName": {
       "type": "string",
       "metadata": {
-        "description": "Unique DNS Name Prefix for the Storage Account where the Virtual Machine's disks will be placed.  StorageAccounts may contain at most variables('vmsPerStorageAccount')"
+        "description": "The storage account to use for sharing data"
+      }
+    },
+    "storageAccountKey": {
+      "type": "string",
+      "metadata": {
+        "description": "The key of the storage account"
+      }
+    },
+    "fileShareName": {
+      "type": "string",
+      "metadata": {
+        "description": "The file share to mount from the storage account"
       }
     },
     "adminUsername": {
