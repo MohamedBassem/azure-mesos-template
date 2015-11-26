@@ -270,7 +270,7 @@
           "storageAccountName": {
             "value": "[parameters('storageAccountName')]"
           },
-          "storageAccountName": {
+          "storageAccountKey": {
             "value": "[parameters('storageAccountKey')]"
           },
           "fileShareName": {
@@ -359,7 +359,7 @@
           "storageAccountName": {
             "value": "[parameters('storageAccountName')]"
           },
-          "storageAccountName": {
+          "storageAccountKey": {
             "value": "[parameters('storageAccountKey')]"
           },
           "fileShareName": {
