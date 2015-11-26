@@ -207,6 +207,20 @@
               "priority": 300,
               "direction": "Inbound"
             }
+          },
+          {
+            "name": "rconsole",
+            "properties": {
+              "description": "Rconsole port",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "5050",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 200,
+              "direction": "Inbound"
+            }
           }
         ]
       }

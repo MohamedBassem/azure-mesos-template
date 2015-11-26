@@ -307,7 +307,6 @@
       "name": "[concat(parameters('masterVMNamePrefix'), '/configuremaster')]",
       "apiVersion": "2015-06-15",
       "location": "[resourceGroup().location]",
-      ,
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('masterVMNamePrefix'))]"
       ],
