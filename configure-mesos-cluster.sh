@@ -33,7 +33,9 @@ set -x
 AZUREUSER=$9
 SSHKEY=${10}
 STORAGEACCOUNTNAME=${11}
+set +x
 STORAGEACCOUNTKEY=${12}
+set -x
 FILESHARENAME=${13}
 HOMEDIR="/home/$AZUREUSER"
 VMNAME=`hostname`
@@ -170,19 +172,10 @@ fi
 
 zkhosts()
 {
-  zkhosts=""
-  for i in `seq 1 $MASTERCOUNT` ;
-  do
-    if [ "$i" -gt "1" ]
-    then
-      zkhosts="${zkhosts},"
-    fi
-
-    IPADDR=`getent hosts ${MASTERPREFIX}${i} | awk '{ print $1 }'`
-    zkhosts="${zkhosts}${IPADDR}:2181"
-    # due to mesos team experience ip addresses are chosen over dns names
-    #zkhosts="${zkhosts}${MASTERPREFIX}${i}:2181"
-  done
+  IPADDR=`getent hosts ${MASTERPREFIX} | awk '{ print $1 }'`
+  zkhosts="${IPADDR}:2181"
+  # due to mesos team experience ip addresses are chosen over dns names
+  #zkhosts="${zkhosts}${MASTERPREFIX}${i}:2181"
   echo $zkhosts
 }
 
@@ -275,20 +268,17 @@ echo $zkmesosconfig | sudo tee /etc/mesos/zk
 
 if ismaster ; then
   echo $VMNUMBER | sudo tee /etc/zookeeper/conf/myid
-  for i in `seq 1 $MASTERCOUNT` ;
-  do
-    IPADDR=`getent hosts ${MASTERPREFIX}${i} | awk '{ print $1 }'`
-    echo "server.${i}=${IPADDR}:2888:3888" | sudo tee -a /etc/zookeeper/conf/zoo.cfg
-    # due to mesos team experience ip addresses are chosen over dns names
-    #echo "server.${i}=${MASTERPREFIX}${i}:2888:3888" | sudo tee -a /etc/zookeeper/conf/zoo.cfg
-  done
+  IPADDR=`getent hosts ${MASTERPREFIX} | awk '{ print $1 }'`
+  echo "server.1=${IPADDR}:2888:3888" | sudo tee -a /etc/zookeeper/conf/zoo.cfg
+  # due to mesos team experience ip addresses are chosen over dns names
+  #echo "server.${i}=${MASTERPREFIX}${i}:2888:3888" | sudo tee -a /etc/zookeeper/conf/zoo.cfg
 fi
 
 #########################################
 # Configure Mesos Master and Frameworks
 #########################################
 if ismaster ; then
-  quorum=`expr $MASTERCOUNT / 2 + 1`
+  quorum="1"
   echo $quorum | sudo tee /etc/mesos-master/quorum
   hostname -i | sudo tee /etc/mesos-master/ip
   hostname | sudo tee /etc/mesos-master/hostname
@@ -355,9 +345,7 @@ if isagent ; then
   # Add mesos-dns IP addresses at the top of resolv.conf
   RESOLV_TMP=resolv.conf.temp
   rm -f $RESOLV_TMP
-  for i in `seq $MASTERCOUNT` ; do
-      echo nameserver `getent hosts ${MASTERPREFIX}${i} | awk '{ print $1 }'` >> $RESOLV_TMP
-  done
+  echo nameserver `getent hosts ${MASTERPREFIX} | awk '{ print $1 }'` >> $RESOLV_TMP
 
   cat /etc/resolv.conf >> $RESOLV_TMP
   mv $RESOLV_TMP /etc/resolv.conf
