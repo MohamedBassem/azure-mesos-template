@@ -259,6 +259,8 @@ else
   time sudo apt-get -y --force-yes install mesos
 fi
 
+echo 'export PYTHONPATH=/usr/lib/python2.7/site-packages' >> /etc/profile
+
 #########################
 # Configure ZooKeeper
 #########################
