@@ -353,7 +353,7 @@ fi
 
 
 #########################
-# Install Golang & RConsole
+# Install Golang & RConsole & its container
 #########################
 
 if ismaster; then
@@ -375,7 +375,15 @@ if ismaster; then
   sudo chown -R $AZUREUSER:$AZUREUSER $GOPATH
 
   echo -e "start on startup\nrespawn\nscript\n\ncd $HOMEDIR/go/src/github.com/MohamedBassem/r-cluster;\n$HOMEDIR/go/bin/r-cluster\nend script\n" > /etc/init/r-cluster.conf
+
 fi
+
+if isagent ; then
+  # Pull the image required for running the R commands
+  docker pull saherneklawy/r-datascience-docker
+fi
+
+
 
 ##############################################
 # Mounting the microsoft account file share to /mnt/nfs
