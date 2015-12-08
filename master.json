@@ -234,6 +234,18 @@
               "backendPort": 5055,
               "enableFloatingIP": false
             }
+          },
+          {
+            "name": "[concat('mesos-master', '')]",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[variables('nodesLbIPConfigID')]"
+              },
+              "protocol": "tcp",
+              "frontendPort": 5050,
+              "backendPort": 5050,
+              "enableFloatingIP": false
+            }
           }
         ]
       }

@@ -239,6 +239,20 @@
               "priority": 400,
               "direction": "Inbound"
             }
+          },
+          {
+            "name": "mesos-master",
+            "properties": {
+              "description": "Mesos Master monitoring panel",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "5050",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 500,
+              "direction": "Inbound"
+            }
           }
         ]
       }
