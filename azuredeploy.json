@@ -2,13 +2,19 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "storageAccountName": {
+    "newStorageAccountNamePrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Globally Unique DNS Name Prefix for the Storage Account where the Virtual Machine's disks will be placed.  An integer will be appended to the end.  StorageAccounts may contain at most variables('vmsPerStorageAccount')"
+      }
+    },
+    "sharedStorageAccountName": {
       "type": "string",
       "metadata": {
         "description": "The storage account to use for sharing data"
       }
     },
-    "storageAccountKey": {
+    "sharedStorageAccountKey": {
       "type": "string",
       "metadata": {
         "description": "The key of the storage account"
@@ -148,6 +154,7 @@
     }
   },
   "variables": {
+    "newStorageAccountNamePrefix": "[tolower(parameters('newStorageAccountNamePrefix'))]",
     "masterVMNamePrefix": "[concat(parameters('clusterPrefix'),'master')]",
     "agentVMNamePrefix": "[concat(parameters('clusterPrefix'),'agent')]",
     "osImagePublisher": "Canonical",
@@ -164,6 +171,7 @@
     "agentFirstAddr": 50,
     "nsgName": "node-nsg",
     "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsgName'))]",
+    "storageAccountType": "Standard_GRS",
     "customScriptLocation": "https://raw.githubusercontent.com/MohamedBassem/azure-rconsole-template/master/",
     "agentFiles": [
       "agent-0.json",
@@ -174,6 +182,15 @@
     "omsStorageAccountKey": "none"
   },
   "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[concat(variables('newStorageAccountNamePrefix'),'0')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "accountType": "[variables('storageAccountType')]"
+      }
+    },
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/networkSecurityGroups",
@@ -258,6 +275,7 @@
       "type": "Microsoft.Resources/deployments",
       "name": "createMasterNodes",
       "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', variables('newStorageAccountNamePrefix'), '0')]",
         "[variables('vnetID')]"
       ],
       "properties": {
@@ -267,14 +285,17 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "storageAccountName": {
-            "value": "[parameters('storageAccountName')]"
+          "sharedStorageAccountName": {
+            "value": "[parameters('sharedStorageAccountName')]"
           },
-          "storageAccountKey": {
-            "value": "[parameters('storageAccountKey')]"
+          "sharedStorageAccountKey": {
+            "value": "[parameters('sharedStorageAccountKey')]"
           },
           "fileShareName": {
             "value": "[parameters('fileShareName')]"
+          },
+          "newStorageAccountName": {
+            "value": "[concat(variables('newStorageAccountNamePrefix'), '0')]"
           },
           "adminUsername": {
             "value": "[parameters('adminUsername')]"
@@ -356,14 +377,17 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "storageAccountName": {
-            "value": "[parameters('storageAccountName')]"
+          "sharedStorageAccountName": {
+            "value": "[parameters('sharedStorageAccountName')]"
           },
-          "storageAccountKey": {
-            "value": "[parameters('storageAccountKey')]"
+          "sharedStorageAccountKey": {
+            "value": "[parameters('sharedStorageAccountKey')]"
           },
           "fileShareName": {
             "value": "[parameters('fileShareName')]"
+          },
+          "newStorageAccountNamePrefix": {
+            "value": "[concat(variables('newStorageAccountNamePrefix'))]"
           },
           "adminUsername": {
             "value": "[parameters('adminUsername')]"
