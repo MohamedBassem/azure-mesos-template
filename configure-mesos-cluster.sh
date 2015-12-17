@@ -205,6 +205,9 @@ time wget -qO- https://get.docker.com | sh
 echo 'DOCKER_OPTS="-H unix:///var/run/docker.sock -H 0.0.0.0:2375"' | sudo tee /etc/default/docker
 # the following insecure registry is for OMS
 echo 'DOCKER_OPTS="$DOCKER_OPTS --insecure-registry 137.135.93.9"' | sudo tee -a /etc/default/docker
+
+sudo gpasswd -a $AZUREUSER docker
+
 sudo service docker restart
 
 ensureDocker()
