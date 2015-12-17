@@ -50,17 +50,6 @@
         "description": "The number of Mesos agents for the cluster."
       }
     },
-    "masterCount": {
-      "type": "int",
-      "allowedValues": [
-        1,
-        3,
-        5
-      ],
-      "metadata": {
-        "description": "The number of Mesos masters for the cluster."
-      }
-    },
     "masterConfiguration": {
       "type": "string",
       "defaultValue": "masters-are-agents",
@@ -110,39 +99,6 @@
       "type": "string",
       "metadata": {
         "description": "The prefix to identify the cluster."
-      }
-    },
-    "swarmEnabled": {
-      "type": "string",
-      "defaultValue": "false",
-      "allowedValues": [
-        "true",
-        "false"
-      ],
-      "metadata": {
-        "description": "Flag for enabling the Docker Swarm framework."
-      }
-    },
-    "marathonEnabled": {
-      "type": "string",
-      "defaultValue": "false",
-      "allowedValues": [
-        "true",
-        "false"
-      ],
-      "metadata": {
-        "description": "Flag for enabling the Marathon framework."
-      }
-    },
-    "chronosEnabled": {
-      "type": "string",
-      "defaultValue": "false",
-      "allowedValues": [
-        "true",
-        "false"
-      ],
-      "metadata": {
-        "description": "Flag for enabling the Chronos framework."
       }
     },
     "sshRSAPublicKey": {
@@ -324,7 +280,7 @@
             "value": "[parameters('masterVMSize')]"
           },
           "masterCount": {
-            "value": "[parameters('masterCount')]"
+            "value": "1"
           },
           "masterConfiguration": {
             "value": "[parameters('masterConfiguration')]"
@@ -357,13 +313,13 @@
             "value": "[variables('customScriptLocation')]"
           },
           "swarmEnabled": {
-            "value": "[parameters('swarmEnabled')]"
+            "value": "false"
           },
           "marathonEnabled": {
-            "value": "[parameters('marathonEnabled')]"
+            "value": "false"
           },
           "chronosEnabled": {
-            "value": "[parameters('chronosEnabled')]"
+            "value": "false"
           },
           "sshRSAPublicKey": {
             "value": "[parameters('sshRSAPublicKey')]"
@@ -416,7 +372,7 @@
             "value": "[parameters('agentCount')]"
           },
           "masterCount": {
-            "value": "[parameters('masterCount')]"
+            "value": "1"
           },
           "subnetPrefix": {
             "value": "[variables('subnetPrefix')]"
@@ -449,13 +405,13 @@
             "value": "[variables('customScriptLocation')]"
           },
           "swarmEnabled": {
-            "value": "[parameters('swarmEnabled')]"
+            "value": "false"
           },
           "marathonEnabled": {
-            "value": "[parameters('marathonEnabled')]"
+            "value": "false"
           },
           "chronosEnabled": {
-            "value": "[parameters('chronosEnabled')]"
+            "value": "false"
           },
           "sshRSAPublicKey": {
             "value": "[parameters('sshRSAPublicKey')]"
