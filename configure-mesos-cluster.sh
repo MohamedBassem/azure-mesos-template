@@ -391,6 +391,13 @@ fi
 # Mounting the microsoft account file share to /mnt/nfs
 ##############################################
 
+if ismaster ; then
+    sudo apt-get install nodejs-legacy
+    sudo apt-get install npm
+    sudo npm install -g azure-cli
+    AZURE_STORAGE_ACCOUNT=$STORAGEACCOUNTNAME AZURE_STORAGE_ACCESS_KEY=$STORAGEACCOUNTKEY azure storage share create $FILESHARENAME
+fi
+
 apt-get install -y apt-file || :
 
 sudo mkdir /mnt/nfs
