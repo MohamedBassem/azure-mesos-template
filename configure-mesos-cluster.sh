@@ -406,7 +406,12 @@ apt-get install -y apt-file || :
 
 sudo mkdir /mnt/nfs
 
-sudo mount -t cifs //${STORAGEACCOUNTNAME}.file.core.windows.net/$FILESHARENAME /mnt/nfs -o vers=3.0,user=$STORAGEACCOUNTNAME,password=$STORAGEACCOUNTKEY,dir_mode=0777,file_mode=0777
+set +x
+while ! sudo mount -t cifs //${STORAGEACCOUNTNAME}.file.core.windows.net/$FILESHARENAME /mnt/nfs -o vers=3.0,user=$STORAGEACCOUNTNAME,password=$STORAGEACCOUNTKEY,dir_mode=0777,file_mode=0777 2> /dev/null; do
+  echo "Waiting for the Azure File Share to be created .."
+  sleep 5;
+done
+set -x
 
 ##############################################
 # configure init rules restart all processes
