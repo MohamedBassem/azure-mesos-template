@@ -239,10 +239,10 @@
         },
         "parameters": {
           "sharedStorageAccountName": {
-            "value": "[concat('Microsoft.Storage/storageAccounts/', variables('newStorageAccountNamePrefix'), '0')]"
+            "value": "[concat(variables('newStorageAccountNamePrefix'), '0')]"
           },
           "sharedStorageAccountKey": {
-            "value": "[listKeys(concat('Microsoft.Storage/storageAccounts/', variables('newStorageAccountNamePrefix'), '0'), '2015-05-01-preview')]"
+            "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', concat(variables('newStorageAccountNamePrefix'), '0')), '2015-05-01-preview').key1]"
           },
           "fileShareName": {
             "value": "[variables('fileShareName')]"
@@ -263,7 +263,7 @@
             "value": "[parameters('masterVMSize')]"
           },
           "masterCount": {
-            "value": "1"
+            "value": 1
           },
           "masterConfiguration": {
             "value": "[parameters('masterConfiguration')]"
@@ -331,10 +331,10 @@
         },
         "parameters": {
           "sharedStorageAccountName": {
-            "value": "[concat('Microsoft.Storage/storageAccounts/', variables('newStorageAccountNamePrefix'), '0')]"
+            "value": "[concat(variables('newStorageAccountNamePrefix'), '0')]"
           },
           "sharedStorageAccountKey": {
-            "value": "[listKeys(concat('Microsoft.Storage/storageAccounts/', variables('newStorageAccountNamePrefix'), '0'), '2015-05-01-preview')]"
+            "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', concat(variables('newStorageAccountNamePrefix'), '0')), '2015-05-01-preview').key1]"
           },
           "fileShareName": {
             "value": "[variables('fileShareName')]"
@@ -355,7 +355,7 @@
             "value": "[parameters('agentCount')]"
           },
           "masterCount": {
-            "value": "1"
+            "value": 1
           },
           "subnetPrefix": {
             "value": "[variables('subnetPrefix')]"
