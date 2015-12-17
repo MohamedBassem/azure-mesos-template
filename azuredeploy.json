@@ -322,7 +322,7 @@
       "name": "createAgents",
       "dependsOn": [
         "[variables('vnetID')]",
-        "[concat('Microsoft.Storage/storageAccounts/createMasterNodes')]"
+        "[concat('Microsoft.Resources/deployments/createMasterNodes')]"
       ],
       "properties": {
         "mode": "Incremental",
