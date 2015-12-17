@@ -321,7 +321,8 @@
       "type": "Microsoft.Resources/deployments",
       "name": "createAgents",
       "dependsOn": [
-        "[variables('vnetID')]"
+        "[variables('vnetID')]",
+        "[concat('Microsoft.Storage/storageAccounts/createMasterNodes')]"
       ],
       "properties": {
         "mode": "Incremental",

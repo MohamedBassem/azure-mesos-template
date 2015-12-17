@@ -394,11 +394,12 @@ fi
 if ismaster ; then
     sudo apt-get install -y nodejs-legacy
     sudo apt-get install -y npm
+    export HOME=/root
     sudo npm install -g azure-cli
-
     set +x
     AZURE_STORAGE_ACCOUNT=$STORAGEACCOUNTNAME AZURE_STORAGE_ACCESS_KEY=$STORAGEACCOUNTKEY azure storage share create $FILESHARENAME
     set -x
+    unset HOME
 fi
 
 apt-get install -y apt-file || :
