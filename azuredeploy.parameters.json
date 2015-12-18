@@ -12,13 +12,10 @@
     "value": "mesosscalable0921g"
   },
   "agentCount": {
-    "value": 3
-  },
-  "masterCount": {
-    "value": 3
+    "value": 2
   },
   "masterConfiguration": {
-    "value": "masters-are-not-agents"
+    "value": "masters-are-agents"
   },
   "agentVMSize" : {
     "value": "Standard_D1"
@@ -27,16 +24,7 @@
     "value": "Standard_D1"
   },
   "clusterPrefix": {
-    "value": "c2"
-  },
-  "swarmEnabled": {
-    "value": "false"
-  },
-  "marathonEnabled": {
-    "value": "true"
-  },
-  "chronosEnabled": {
-    "value": "true"
+    "value": "c1"
   },
   "sshRSAPublicKey": {
     "value": "disabled"
