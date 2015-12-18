@@ -14,11 +14,11 @@ Once your cluster has been created you will have a resource group containing 2 p
 
 2. a set of agents behind in an agent specific availability set.  The agent VMs must be accessed through the master
 
+All VMs are on the same private subnet, 10.0.0.0/18, and fully accessible to each other.
+
 # R-Cluster
 
-R-Cluster runs on the master machine and listens to port 5055. So it's accessible via "http://<publicDnsAddress>:5055".
-
-All VMs are on the same private subnet, 10.0.0.0/18, and fully accessible to each other.
+R-Cluster runs on the master machine and listens to port 5055. So it's accessible via "http://publicDnsAddress:5055".
 
 # Installation Notes
 
