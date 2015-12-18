@@ -256,11 +256,7 @@ echo "deb http://repos.mesosphere.io/${DISTRO} ${CODENAME} main" | sudo tee /etc
 time sudo add-apt-repository -y ppa:openjdk-r/ppa
 time sudo apt-get -y update
 time sudo apt-get -y install openjdk-8-jre-headless
-if ismaster ; then
-  time sudo apt-get -y --force-yes install mesosphere
-else
-  time sudo apt-get -y --force-yes install mesos
-fi
+time sudo apt-get -y --force-yes install mesos=0.25.0-0.2.70.ubuntu1404
 
 echo 'export PYTHONPATH=/usr/lib/python2.7/site-packages' >> /etc/profile
 
