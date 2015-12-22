@@ -18,7 +18,7 @@ All VMs are on the same private subnet, 10.0.0.0/18, and fully accessible to eac
 
 # R-Cluster
 
-R-Cluster runs on the master machine and listens to port 5055. So it's accessible via "http://publicDnsAddress:5055".
+R-Cluster runs on the master machine and listens to port 5055. So it's accessible via "http://publicdnsaddress:5055". Mesos master runs on port 5050 and accessible via http://publicdnsaddress:5050.
 
 # Installation Notes
 
@@ -38,6 +38,25 @@ When you launch the installation of the cluster, you need to specify the followi
 * `masterVMSize`: Same as agentVMSize but for the master machine.
 * `clusterPrefix`: this is the prefix that will be used to create all VM names. You can use the prefix to easily identify the machines that belongs to a specific cluster. If, for instance, prefix is 'c1', machines will be created as c1master1, c1agent1, c1agent5, ...
 * `sshRSAPublicKey`: Configure all linux machines with the SSH rsa public key string.  Use 'disabled' to not configure access with SSH rsa public key.
+
+# Common Tasks:
+
+### SSH-ing to the master node
+Assuming:
+DNSname : mesos
+Username : meso
+Resource Group location was : westus
+
+```bash
+ssh mesos@mesos.westus.cloudapp.azure.com -p 2211
+```
+
+### SSH-ing to a certain agent
+
+- SSH to master and then :
+```
+ssh 10.0.0.5[0-9]
+```
 
 # Questions
 
