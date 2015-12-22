@@ -279,6 +279,9 @@
                 },
                 {
                   "id": "[concat(variables('nodesLbID'),'/inboundNatRules/RConsole-Port')]"
+                },
+                {
+                  "id": "[concat(variables('nodesLbID'),'/inboundNatRules/mesos-master')]"
                 }
               ]
             }
