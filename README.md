@@ -43,11 +43,12 @@ When you launch the installation of the cluster, you need to specify the followi
 
 ### SSH-ing to the master node
 Assuming:
+
 DNSname : mesos
 
 Username : meso
 
-Resource Group location was : westus
+Resource group location : westus
 
 ```bash
 ssh mesos@mesos.westus.cloudapp.azure.com -p 2211
