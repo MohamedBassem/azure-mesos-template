@@ -53,6 +53,16 @@ Resource Group location was : westus
 ssh mesos@mesos.westus.cloudapp.azure.com -p 2211
 ```
 
+
+### Checking delpoyment logs
+
+- SSH to master and then :
+```bash
+sudo -i
+tail -f /var/log/azure/cluster-bootstrap.log
+```
+
+
 ### SSH-ing to a certain agent
 
 - SSH to master and then :
