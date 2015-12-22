@@ -44,7 +44,9 @@ When you launch the installation of the cluster, you need to specify the followi
 ### SSH-ing to the master node
 Assuming:
 DNSname : mesos
+
 Username : meso
+
 Resource Group location was : westus
 
 ```bash
