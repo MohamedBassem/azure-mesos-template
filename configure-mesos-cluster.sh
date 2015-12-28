@@ -410,6 +410,8 @@ while ! sudo mount -t cifs //${STORAGEACCOUNTNAME}.file.core.windows.net/$FILESH
   echo "Waiting for the Azure File Share to be created .."
   sleep 5;
 done
+
+echo "//${STORAGEACCOUNTNAME}.file.core.windows.net/$FILESHARENAME /mnt/nfs cifs vers=3.0,username=$STORAGEACCOUNTNAME,password=$STORAGEACCOUNTKEY,dir_mode=0777,file_mode=0777" >> /etc/fstab
 set -x
 
 ##############################################
